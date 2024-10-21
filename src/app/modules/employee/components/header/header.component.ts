@@ -79,7 +79,7 @@ export class HeaderComponent implements OnInit {
   getUser() {
     this.service
       .getnotificationByUserId(
-        StorageService.getUser()?.id ? Number(StorageService.getUser()?.id) : 0
+        this.corectUserId ? this.corectUserId :  this.user.id
       )
       .subscribe((res) => {
         this.notifications = res.map((el: any) => ({
@@ -96,11 +96,14 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit(): void {
     this.corectUserId=StorageService.getUserIdFromToken();
+    this.getUserDetail()
     this.checkCanShowSearchAsOverlay(window.innerWidth);
     this.selectedLanguage = StorageService.getlang();
+
     this.getUser();
+
     this.getUnreadCount();
-    this.getUserDetail()
+
 
   }
 
@@ -127,12 +130,8 @@ export class HeaderComponent implements OnInit {
     this.canShowSearchAsOverlay = innerWidth < 845;
   }
   viewNotifications() {
-    // this.service.markAllNotificationsAsRead().subscribe(() => {
-    //   // Réinitialiser le compteur de notifications après avoir marqué toutes les notifications comme lues
-    //   this.notifications.forEach(notification => notification.read = true);
-    //   this.newNotificationsCount = 0;
-    // });
-    const userId = StorageService.getUser()?.id;
+
+    const userId = this.corectUserId || StorageService.getUser()?.id;
     if (userId) {
       this.service.markAllNotificationsAsRead(userId).subscribe(() => {
         this.newNotificationsCount = 0;

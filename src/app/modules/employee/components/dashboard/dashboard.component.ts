@@ -62,9 +62,7 @@ export class DashboardComponent implements OnInit {
   }
 
   getUser() {
-    // this.service.getEmployeById(this.id).subscribe((res) => {
-    //   this.user = res;
-    // });
+
     this.service.getUserById(this.corectUserId).subscribe((res)=> {
       this.user=res;
       console.log("this the user",this.user);
@@ -182,6 +180,22 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.route.queryParams.subscribe((params:any) => {
+
+
+      const token = params['token'];
+      console.log('Token from query params:', token);
+      if (token) {
+        localStorage.setItem('token', token);
+
+
+
+
+      }
+      else {
+        console.error('No token found in query parameters');
+      }
+    });
     this.corectUserId=StorageService.getUserIdFromToken();
     this.currentUser = StorageService.getUser();
 
@@ -199,22 +213,7 @@ export class DashboardComponent implements OnInit {
 
 
 
-    this.route.queryParams.subscribe((params:any) => {
 
-
-      const token = params['token'];
-      console.log('Token from query params:', token);
-      if (token) {
-        localStorage.setItem('token', token);
-
-
-
-
-      }
-      else {
-        console.error('No token found in query parameters');
-      }
-    });
     this.getUser();
 
 
