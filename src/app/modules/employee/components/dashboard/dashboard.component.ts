@@ -59,6 +59,9 @@ export class DashboardComponent implements OnInit {
 
   constructor(private service: EmployeeService,private route:ActivatedRoute) {
     this.getUser();
+    this.getTasksByuser_id(
+      StorageService.getUser()?.id ? Number(StorageService.getUser()?.id) : 0
+    );
   }
 
   getUser() {
@@ -73,6 +76,7 @@ export class DashboardComponent implements OnInit {
 
   getTasksByuser_id(id: number) {
     this.service.getTasksByUserId(id).subscribe((res) => {
+      console.log("taskkkkkkkkkkk",res)
       this.total = res?.length;
 
       this.tasks = res
@@ -118,7 +122,7 @@ export class DashboardComponent implements OnInit {
           datasets: [
             {
               label: 'Stat of Task Progress',
-              data: [this.done ?? 0, this.inprogress ?? 0, this.tasks ?? 0],
+              data: [this.done , this.inprogress  , this.tasks ],
               backgroundColor: [
                 'rgb(255, 99, 132)',
                 'rgb(75, 192, 192)',
